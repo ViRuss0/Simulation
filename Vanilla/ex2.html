@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<title>Ex2</title>
+	</head>
+	<body>
+		<div
+			class="flex flex-col gap-10 p-20 items-center justify-start bg-slate-700 h-screen"
+		>
+			<img
+				class="w-96"
+				src="https://1000logos.net/wp-content/uploads/2017/05/Pokemon-Logo-1024x640.png"
+				alt=""
+			/>
+			<div class="flex gap-10">
+				<div
+					class="bg-slate-100 text-slate-700 p-4 rounded-xl flex shadow-xl w-72 h-40 items-center justify-center gap-10"
+				>
+					<div id="pkmn-view"></div>
+				</div>
+				<div
+					class="bg-slate-100 text-slate-700 flex flex-col gap-8 p-4 rounded-xl items-center justify-center h-40 w-72 shadow-xl"
+				>
+					<input
+						id="ipt"
+						class="p-2 bg-slate-100 border border-slate-500 rounded-full w-full outline-none text-center"
+						placeholder="Digita il nome di un pokemon"
+						type="text"
+						name=""
+						id=""
+					/>
+					<button
+						id="btn"
+						class="bg-slate-700 rounded-full text-white p-2 w-20 hover:bg-slate-500"
+					>
+						Add
+					</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			const pkmnView = document.getElementById('pkmn-view');
+			const ipt = document.getElementById('ipt');
+			const btn = document.getElementById('btn');
+
+			const getPkmn = async (pkmn) => {
+				pkmnView.innerHTML = 'Loading';
+				const res = await fetch('https://pokeapi.co/api/v2/pokemon/' + pkmn);
+				if (res.status !== 200) {
+					pkmnView.innerHTML = 'Il Pokémon non esiste';
+					return;
+				}
+				const {
+					name,
+					height,
+					weight,
+					sprites: { front_default },
+					types: [{ type }],
+					abilities: [{ ability }],
+				} = await res.json();
+				pkmnView.innerHTML = `<div class="flex gap-2 items-center justify-center text-sm"><div class="flex flex-col gap-1"><h1 class="font-bold text-lg">${
+					name[0].toUpperCase() + name.slice(1)
+				}</h1><span>Height: ${height}</span><span>Weight: ${weight}</span><span>Type: ${
+					type.name
+				}</span><span>Ability: ${
+					ability.name
+				}</span></div><img src=${front_default} alt="pkmn-image"></div>`;
+			};
+
+			getPkmn('pikachu');
+
+			btn.addEventListener('click', () => getPkmn(ipt.value));
+		</script>
+	</body>
+</html>

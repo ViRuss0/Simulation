@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<title>Ex1</title>
+	</head>
+	<body>
+		<main
+			class="bg-sky-100 h-screen flex flex-col gap-20 items-center justify-center"
+		>
+			<div class="flex gap-6">
+				<button
+					id="best-btn"
+					class="bg-red-700 rounded-full hover:bg-red-900 p-3 w-48 text-white"
+				>
+					Ordina per migliore
+				</button>
+				<button
+					id="worst-btn"
+					class="bg-red-700 rounded-full hover:bg-red-900 p-3 w-48 text-white"
+				>
+					Ordina per peggiore
+				</button>
+			</div>
+			<div
+				id="container"
+				class="flex flex-col gap-4 items-center justify-center"
+			></div>
+		</main>
+
+		<script>
+			const container = document.getElementById('container');
+			const bestBtn = document.getElementById('best-btn');
+			const worstBtn = document.getElementById('worst-btn');
+
+			const json = `[
+ {"id": 1, "fullname": "mario rossi", "avg": 6},
+ {"id": 2, "fullname": "luigi verdi", "avg": 4},
+ {"id": 3, "fullname": "peach pink", "avg": 8},
+ {"id": 4, "fullname": "wario rossi", "avg": 9}
+]`;
+
+			const students = JSON.parse(json);
+			const renderList = (list) => {
+				container.innerHTML = '';
+				list.forEach((stud) => {
+					const div = document.createElement('div');
+					div.classList.add(
+						'p-4',
+						'bg-sky-900',
+						'text-white',
+						'flex',
+						'flex-col',
+						'gap-2',
+						'rounded',
+						'items-center',
+						'justify-center'
+					);
+					div.innerHTML = `<h2>Nome: ${stud.fullname}</h2><p>id: ${stud.id} - Media voto: ${stud.avg}</p>`;
+					container.appendChild(div);
+				});
+			};
+			renderList(students);
+
+			bestBtn.addEventListener('click', () => {
+				renderList(students.toSorted((a, b) => b.avg - a.avg));
+			});
+			worstBtn.addEventListener('click', () => {
+				renderList(students.toSorted((a, b) => a.avg - b.avg));
+			});
+		</script>
+	</body>
+</html>
